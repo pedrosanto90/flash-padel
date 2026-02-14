@@ -1,0 +1,109 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <!-- Logo & Nav Links -->
+        <div class="flex">
+          <a routerLink="/" class="flex items-center gap-2 text-xl font-bold text-blue-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Flash Padel
+          </a>
+          <div class="hidden sm:ml-8 sm:flex sm:space-x-4">
+            <a routerLink="/" routerLinkActive="border-blue-500 text-gray-900" [routerLinkActiveOptions]="{ exact: true }"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">
+              Dashboard
+            </a>
+            <a routerLink="/tournaments" routerLinkActive="border-blue-500 text-gray-900"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">
+              Torneios
+            </a>
+            <a routerLink="/players" routerLinkActive="border-blue-500 text-gray-900"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors">
+              Jogadores
+            </a>
+            @if (auth.isOrganizer()) {
+              <a routerLink="/tournaments/new" routerLinkActive="border-blue-500 text-gray-900"
+                class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-green-600 hover:text-green-700 hover:border-green-300 transition-colors">
+                + Criar Torneio
+              </a>
+            }
+          </div>
+        </div>
+
+        <!-- User Menu -->
+        <div class="hidden sm:flex sm:items-center sm:gap-4">
+          <a routerLink="/profile"
+            class="text-sm text-gray-700 hover:text-gray-900 transition-colors">
+            {{ auth.profile()?.full_name || 'Perfil' }}
+          </a>
+          <button (click)="logout()"
+            class="text-sm text-gray-500 hover:text-red-600 transition-colors cursor-pointer">
+            Sair
+          </button>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="flex items-center sm:hidden">
+          <button (click)="toggleMobileMenu()" type="button"
+            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 cursor-pointer">
+            @if (!mobileMenuOpen()) {
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            } @else {
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    @if (mobileMenuOpen()) {
+      <div class="sm:hidden border-t border-gray-200">
+        <div class="pt-2 pb-3 space-y-1">
+          <a routerLink="/" (click)="closeMobileMenu()" routerLinkActive="bg-blue-50 border-blue-500 text-blue-700" [routerLinkActiveOptions]="{ exact: true }"
+            class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition-colors">
+            Dashboard
+          </a>
+          <a routerLink="/tournaments" (click)="closeMobileMenu()" routerLinkActive="bg-blue-50 border-blue-500 text-blue-700"
+            class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition-colors">
+            Torneios
+          </a>
+          <a routerLink="/players" (click)="closeMobileMenu()" routerLinkActive="bg-blue-50 border-blue-500 text-blue-700"
+            class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 transition-colors">
+            Jogadores
+          </a>
+          @if (auth.isOrganizer()) {
+            <a routerLink="/tournaments/new" (click)="closeMobileMenu()" routerLinkActive="bg-green-50 border-green-500 text-green-700"
+              class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-green-600 hover:bg-green-50 hover:border-green-300 transition-colors">
+              + Criar Torneio
+            </a>
+          }
+        </div>
+        <div class="pt-4 pb-3 border-t border-gray-200">
+          <div class="space-y-1">
+            <a routerLink="/profile" (click)="closeMobileMenu()"
+              class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors">
+              {{ auth.profile()?.full_name || 'Perfil' }}
+            </a>
+            <button (click)="logout()"
+              class="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-red-600 hover:bg-gray-100 cursor-pointer transition-colors">
+              Sair
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <router-outlet />
+  </main>
+</div>

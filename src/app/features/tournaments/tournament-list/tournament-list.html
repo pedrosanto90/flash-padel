@@ -1,0 +1,76 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-gray-900">Torneios</h1>
+    @if (auth.isOrganizer()) {
+      <a routerLink="/tournaments/new"
+        class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+        + Criar Torneio
+      </a>
+    }
+  </div>
+
+  <!-- Filters -->
+  <div class="flex flex-wrap gap-2">
+    @for (f of [
+      { value: 'all', label: 'Todos' },
+      { value: 'registration', label: 'Inscricoes Abertas' },
+      { value: 'in_progress', label: 'Em Curso' },
+      { value: 'completed', label: 'Concluidos' },
+      { value: 'mine', label: 'Os Meus' }
+    ]; track f.value) {
+      <button (click)="setFilter(f.value)"
+        [class]="filter() === f.value
+          ? 'px-3 py-1.5 text-sm font-medium rounded-full bg-blue-600 text-white cursor-pointer'
+          : 'px-3 py-1.5 text-sm font-medium rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 cursor-pointer transition-colors'">
+        {{ f.label }}
+      </button>
+    }
+  </div>
+
+  <!-- List -->
+  @if (loading()) {
+    <div class="text-center py-12 text-gray-500">A carregar torneios...</div>
+  } @else if (filteredTournaments.length === 0) {
+    <div class="text-center py-12">
+      <p class="text-gray-500">Nenhum torneio encontrado.</p>
+      @if (auth.isOrganizer()) {
+        <a routerLink="/tournaments/new" class="mt-2 inline-block text-blue-600 hover:text-blue-700 text-sm font-medium">
+          Criar um torneio
+        </a>
+      }
+    </div>
+  } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (tournament of filteredTournaments; track tournament.id) {
+        <a [routerLink]="['/tournaments', tournament.id]"
+          class="block bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+          <div class="p-5">
+            <div class="flex items-start justify-between">
+              <h3 class="font-semibold text-gray-900">{{ tournament.name }}</h3>
+              <span [class]="'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ' + getStatusClass(tournament.status)">
+                {{ getStatusLabel(tournament.status) }}
+              </span>
+            </div>
+            @if (tournament.description) {
+              <p class="mt-2 text-sm text-gray-600 line-clamp-2">{{ tournament.description }}</p>
+            }
+            <div class="mt-4 space-y-1 text-sm text-gray-500">
+              <p>{{ getFormatLabel(tournament.format) }}</p>
+              <p>{{ tournament.start_date | date:'dd/MM/yyyy' }}</p>
+              @if (tournament.location) {
+                <p>{{ tournament.location }}</p>
+              }
+              <p>Max. {{ tournament.max_teams }} equipas</p>
+            </div>
+            @if (tournament.organizer) {
+              <p class="mt-3 text-xs text-gray-400">
+                Organizado por {{ tournament.organizer.full_name }}
+              </p>
+            }
+          </div>
+        </a>
+      }
+    </div>
+  }
+</div>

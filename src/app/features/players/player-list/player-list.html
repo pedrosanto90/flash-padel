@@ -1,0 +1,46 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-gray-900">Jogadores</h1>
+  </div>
+
+  <!-- Search -->
+  <div>
+    <input type="text" placeholder="Pesquisar jogadores..."
+      [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" (input)="onSearch()" name="search"
+      class="block w-full max-w-md px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+  </div>
+
+  <!-- List -->
+  @if (loading()) {
+    <div class="text-center py-12 text-gray-500">A carregar jogadores...</div>
+  } @else if (filteredPlayers().length === 0) {
+    <div class="text-center py-12 text-gray-500">Nenhum jogador encontrado.</div>
+  } @else {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (player of filteredPlayers(); track player.id) {
+        <a [routerLink]="['/players', player.id]"
+          class="block bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow p-5">
+          <div class="flex items-center gap-4">
+            <div class="flex-shrink-0 h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+              <span class="text-blue-600 font-semibold text-lg">
+                {{ player.full_name.charAt(0).toUpperCase() }}
+              </span>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-900">{{ player.full_name }}</p>
+              <div class="mt-1 flex items-center gap-3 text-sm text-gray-500">
+                @if (player.skill_level) {
+                  <span>Nivel {{ player.skill_level }}</span>
+                }
+                @if (player.preferred_side) {
+                  <span>{{ getSideLabel(player.preferred_side) }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</div>

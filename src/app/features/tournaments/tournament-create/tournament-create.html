@@ -1,0 +1,145 @@
+<div class="max-w-2xl mx-auto">
+  <div class="flex items-center gap-4 mb-6">
+    <a routerLink="/tournaments" class="text-gray-400 hover:text-gray-600 transition-colors">
+      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+    <h1 class="text-2xl font-bold text-gray-900">Criar Torneio</h1>
+  </div>
+
+  @if (error()) {
+    <div class="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+      {{ error() }}
+    </div>
+  }
+
+  <form (ngSubmit)="onSubmit()" class="space-y-6">
+    <!-- Basic Info -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Informacao Basica</h2>
+
+      <div class="space-y-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">Nome do torneio *</label>
+          <input id="name" type="text" required
+            [ngModel]="name()" (ngModelChange)="name.set($event)" name="name"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Ex: Torneio de Verao 2026" />
+        </div>
+
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700">Descricao</label>
+          <textarea id="description" rows="3"
+            [ngModel]="description()" (ngModelChange)="description.set($event)" name="description"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Descricao do torneio..."></textarea>
+        </div>
+
+        <div>
+          <label for="format" class="block text-sm font-medium text-gray-700">Formato *</label>
+          <select id="format"
+            [ngModel]="format()" (ngModelChange)="format.set($event)" name="format"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            <option value="single_elimination">Eliminacao Direta</option>
+            <option value="round_robin">Round Robin (Todos vs Todos)</option>
+            <option value="groups_elimination">Fase de Grupos + Eliminacao</option>
+            <option value="americano">Americano</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="maxTeams" class="block text-sm font-medium text-gray-700">Maximo de equipas *</label>
+          <input id="maxTeams" type="number" min="2" required
+            [ngModel]="maxTeams()" (ngModelChange)="maxTeams.set($event)" name="maxTeams"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="startDate" class="block text-sm font-medium text-gray-700">Data de inicio *</label>
+            <input id="startDate" type="date" required
+              [ngModel]="startDate()" (ngModelChange)="startDate.set($event)" name="startDate"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+          </div>
+          <div>
+            <label for="endDate" class="block text-sm font-medium text-gray-700">Data de fim</label>
+            <input id="endDate" type="date"
+              [ngModel]="endDate()" (ngModelChange)="endDate.set($event)" name="endDate"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+          </div>
+        </div>
+
+        <div>
+          <label for="location" class="block text-sm font-medium text-gray-700">Localizacao</label>
+          <input id="location" type="text"
+            [ngModel]="location()" (ngModelChange)="location.set($event)" name="location"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            placeholder="Ex: Padel Club Lisboa" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Match Settings -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Configuracao de Jogos</h2>
+
+      <div class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="setsPerMatch" class="block text-sm font-medium text-gray-700">Sets por jogo</label>
+            <input id="setsPerMatch" type="number" min="1" max="5"
+              [ngModel]="setsPerMatch()" (ngModelChange)="setsPerMatch.set($event)" name="setsPerMatch"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+          </div>
+          <div>
+            <label for="gamesPerSet" class="block text-sm font-medium text-gray-700">Games por set</label>
+            <input id="gamesPerSet" type="number" min="1"
+              [ngModel]="gamesPerSet()" (ngModelChange)="gamesPerSet.set($event)" name="gamesPerSet"
+              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <input id="thirdPlaceMatch" type="checkbox"
+            [ngModel]="thirdPlaceMatch()" (ngModelChange)="thirdPlaceMatch.set($event)" name="thirdPlaceMatch"
+            class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+          <label for="thirdPlaceMatch" class="text-sm font-medium text-gray-700">Jogo pelo 3o lugar</label>
+        </div>
+
+        @if (format() === 'groups_elimination') {
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="groupsCount" class="block text-sm font-medium text-gray-700">Numero de grupos</label>
+              <input id="groupsCount" type="number" min="2"
+                [ngModel]="groupsCount()" (ngModelChange)="groupsCount.set($event)" name="groupsCount"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+            </div>
+            <div>
+              <label for="teamsPerGroup" class="block text-sm font-medium text-gray-700">Equipas por grupo</label>
+              <input id="teamsPerGroup" type="number" min="2"
+                [ngModel]="teamsPerGroup()" (ngModelChange)="teamsPerGroup.set($event)" name="teamsPerGroup"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="flex justify-end gap-3">
+      <a routerLink="/tournaments"
+        class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+        Cancelar
+      </a>
+      <button type="submit" [disabled]="saving()"
+        class="px-6 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer">
+        @if (saving()) {
+          A criar...
+        } @else {
+          Criar Torneio
+        }
+      </button>
+    </div>
+  </form>
+</div>
